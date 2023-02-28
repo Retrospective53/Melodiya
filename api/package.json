@@ -1,11 +1,14 @@
 {
   "dependencies": {
+    "backblaze-b2": "^1.7.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "mongoose": "^6.10.0"
+    "mongoose": "^6.10.0",
+    "mongoose-unique-validator": "^3.1.0"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "nodemon": "^2.0.20"
   },
   "name": "api",
