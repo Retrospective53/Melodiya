@@ -4,7 +4,7 @@ const uniqueValidator = require("mongoose-unique-validator");
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
-    required: [true, "username is required"],
+    required: [true, "Username is required"],
     unique: true,
     minLength: [6, "username must be at least 6 characters"],
   },
@@ -30,15 +30,21 @@ const userSchema = new mongoose.Schema({
       ref: "Song",
     },
   ],
-  friend: [
+  friends: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
   ],
   profile: { type: String },
-  bio: { type: String, default: "Hello World" },
+  bio: { type: String, default: `Hello I am ${this.name}` },
   createdAt: { type: Date, default: Date.now },
+  following: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
 });
 
 userSchemas.set("toJson", {
