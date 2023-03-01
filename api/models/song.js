@@ -18,7 +18,7 @@ const songSchema = new Schema({
   picture: { type: String },
 });
 
-songSchema.set("toJson", {
+songSchema.set("toJSON", {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString();
     delete returnedObject._id;

@@ -33,12 +33,7 @@ userRouter.post("/", async (request, response) => {
 });
 
 userRouter.get("/", async (request, response) => {
-  const users = await User.find({})
-    .populate("songs")
-    .populate("favSongs")
-    .populate("friends")
-    .populate("following")
-    .populate("followers");
+  const users = await User.find({});
 
   response.status(200).json(users);
 });
@@ -54,4 +49,20 @@ userRouter.get("/:id", async (request, response) => {
   response.status(200).json(user);
 });
 
+userRouter.put("/:id", async (request, response) => {
+  const { username, name, email, profilePicture, bio } = request.body;
+  const user = await User.findByIdAndUpdate(
+    request.params.id,
+    {
+      username,
+      name,
+      email,
+      profilePicture,
+      bio,
+    },
+    { new: true }
+  );
+
+  response.status(200).json(user);
+});
 module.exports = userRouter;
