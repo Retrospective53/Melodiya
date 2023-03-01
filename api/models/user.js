@@ -1,12 +1,14 @@
 const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
 
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
     required: [true, "Username is required"],
     unique: true,
-    minLength: [6, "username must be at least 6 characters"],
+    minLength: [4, "username must be at least 4 characters"],
   },
   name: {
     type: String,
@@ -17,6 +19,12 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "Email is required"],
     unique: true,
+    validate: {
+      validator: function (v) {
+        return emailRegex.test(v);
+      },
+      message: (props) => `${props.value} is not a valid email address!`,
+    },
   },
   songs: [
     {
@@ -36,8 +44,13 @@ const userSchema = new mongoose.Schema({
       ref: "User",
     },
   ],
-  profile: { type: String },
-  bio: { type: String, default: `Hello I am ${this.name}` },
+  profilePicture: { type: String },
+  bio: {
+    type: String,
+    default: function () {
+      return `Hello I am ${this.name}`;
+    },
+  },
   createdAt: { type: Date, default: Date.now },
   following: [
     {
@@ -45,9 +58,15 @@ const userSchema = new mongoose.Schema({
       ref: "User",
     },
   ],
+  followers: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
 });
 
-userSchemas.set("toJson", {
+userSchema.set("toJson", {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString();
     delete returnedObject._id;
