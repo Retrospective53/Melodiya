@@ -33,7 +33,12 @@ userRouter.post("/", async (request, response) => {
 });
 
 userRouter.get("/", async (request, response) => {
-  const users = await User.find({});
+  const users = await User.find({})
+    .populate("songs")
+    .populate("favSongs")
+    .populate("friends")
+    .populate("following")
+    .populate("followers");
 
   response.status(200).json(users);
 });
