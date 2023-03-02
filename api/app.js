@@ -4,7 +4,11 @@ require("express-async-errors");
 const mongoose = require("mongoose");
 const app = express();
 const cors = require("cors");
-const { requestLogger, unknownEndpoint } = require("./utils/middleware");
+const {
+  requestLogger,
+  unknownEndpoint,
+  errorHandler,
+} = require("./utils/middleware");
 const userRouter = require("./controllers/userRouter");
 const loginRouter = require("./controllers/loginRouter");
 
@@ -23,5 +27,6 @@ app.get("/lol", (req, res) => {
 });
 
 app.use(unknownEndpoint);
+app.use(errorHandler);
 
 module.exports = app;
