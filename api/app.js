@@ -8,6 +8,7 @@ const middleware = require("./utils/middleware");
 const userRouter = require("./controllers/userRouter");
 const loginRouter = require("./controllers/loginRouter");
 const songRouter = require("./controllers/songRouter");
+const storageRouter = require("./controllers/storageRouter");
 
 mongoose.connect(process.env.MONGODB_URI);
 
@@ -19,6 +20,7 @@ app.use(express.static("public"));
 app.use("/api/users", userRouter);
 app.use("/api/auth", loginRouter);
 app.use("/api/songs", songRouter);
+app.use("/api/storage", storageRouter);
 
 app.get("/lol", (req, res) => {
   res.json({ lol: "aweaweawe" });

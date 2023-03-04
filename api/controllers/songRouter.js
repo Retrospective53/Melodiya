@@ -16,7 +16,7 @@ songRouter.get("/:id", async (request, response) => {
 });
 
 songRouter.post("/", async (request, response) => {
-  const { title, artist, genres, image, fileId, duration } = request.body;
+  const { title, genres, image, picture } = request.body;
 
   // const filePath = request.file.path;
   // const metadata = mm.parseFile(filePath);
@@ -31,6 +31,7 @@ songRouter.post("/", async (request, response) => {
     image,
     fileId,
     duration,
+    picture,
   });
   const savedSong = await song.save();
   response.status(201).json(savedSong);

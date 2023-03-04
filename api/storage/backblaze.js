@@ -107,10 +107,10 @@ const getFileInfo = async (fileId) => {
 //   "4_z8e01a377aea4942481620a1b_f1051c760cdbedf29_d20230304_m001625_c005_v0501005_t0044_u01677888985542"
 // );
 
-// module.exports = {
-//   bucketList,
-//   getBucketId,
-//   uploadFile,
-//   getFileById,
-//   getFileInfo,
-// };
+module.exports = {
+  bucketList,
+  getBucketId,
+  uploadFile,
+  getFileById,
+  getFileInfo,
+};
