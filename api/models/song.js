@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
-const uniqueValidator = require("unique-validator");
+const uniqueValidator = require("mongoose-unique-validator");
 
-const songSchema = new Schema({
-  title: { type: string, default: "untitled" },
-  artist: { type: Schema.Types.ObjectId, ref: "User" },
-  fileUrl: { type: string, required: true },
+const songSchema = new mongoose.Schema({
+  title: { type: String, default: "untitled" },
+  artist: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  fileId: { type: String, required: true },
   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User", unique: true }],
-  duration: { type: Number, required: true },
+  duration: { type: Number },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
   album: { type: mongoose.Schema.Types.ObjectId, ref: "Album" },

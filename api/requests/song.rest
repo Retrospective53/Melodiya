@@ -1,0 +1,8 @@
+POST http://localhost:3003/api/songs
+Content-Type: application/json
+
+{
+  "title": "stay the way you are",
+  "artis": "yuu",
+  "fileId": "4_z8e01a377aea4942481620a1b_f10557543f96aeb4a_d20230304_m030715_c005_v0501003_t0025_u01677899235238"
+}
