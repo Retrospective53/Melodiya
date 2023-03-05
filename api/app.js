@@ -16,6 +16,8 @@ app.use(cors());
 app.use(express.json());
 app.use(middleware.requestLogger);
 app.use(express.static("public"));
+app.use(middleware.tokenExtractor);
+app.use(middleware.userExtractor);
 
 app.use("/api/users", userRouter);
 app.use("/api/auth", loginRouter);

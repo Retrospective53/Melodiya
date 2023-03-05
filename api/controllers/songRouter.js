@@ -1,5 +1,6 @@
 const songRouter = require("express").Router();
 const Song = require("../models/song");
+const Genre = require("../models/genre");
 // const b2Method = require("../storage/backblaze");
 // const multer = require("multer");
 // const upload = multer({ dest: "uploads/" });
@@ -35,6 +36,22 @@ songRouter.post("/", async (request, response) => {
   });
   const savedSong = await song.save();
   response.status(201).json(savedSong);
+});
+
+songRouter.delete("/:id", async (request, response) => {
+  const song = await Song.findById(request.params.id);
+  await song.remove();
+  response.status(204).end();
+});
+
+// genre
+
+songRouter.post("/:id/genres", async (request, response) => {
+  const { name } = request.body;
+  const song = await Song.findById(request.params.id);
+  song.genres.push(name);
+  await song.save();
+  response.status(201).json(song);
 });
 
 module.exports = songRouter;
