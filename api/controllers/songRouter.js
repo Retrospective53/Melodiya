@@ -1,6 +1,7 @@
 const songRouter = require("express").Router();
 const Song = require("../models/song");
 const Genre = require("../models/genre");
+const User = require("../models/user");
 // const b2Method = require("../storage/backblaze");
 // const multer = require("multer");
 // const upload = multer({ dest: "uploads/" });
@@ -17,13 +18,31 @@ songRouter.get("/:id", async (request, response) => {
 });
 
 songRouter.post("/", async (request, response) => {
-  const { title, genres, image, picture } = request.body;
+  const { title, genres, image, picture, fileId, duration } = request.body;
+  const user = request.user;
+  if (!user) {
+    return response.status(401).json({ error: "Unauthorized" });
+  }
+
+  if (genres) {
+    for (let genreName of genres) {
+      const existingGenre = await Genre.findOne({ name: genreName });
+      if (existingGenre) {
+        song.genres.push(existingGenre._id);
+      } else {
+        const newGenre = new Genre({ name: genreName });
+        const savedGenre = await newGenre.save();
+        song.genres.push(savedGenre._id);
+      }
+    }
+  }
 
   // const filePath = request.file.path;
   // const metadata = mm.parseFile(filePath);
   // const duration = metadata.format.duration;
 
   // const fileId = await b2Method.uploadFile(request.file.originalname, filePath);
+  const artist = user._id;
 
   const song = new Song({
     title,
@@ -35,7 +54,23 @@ songRouter.post("/", async (request, response) => {
     picture,
   });
   const savedSong = await song.save();
+  console.log(savedSong);
   response.status(201).json(savedSong);
+});
+
+songRouter.put("/:id/likes", async (request, response) => {
+  const song = await Song.findById(request.params.id);
+  const user = request.user;
+  if (!user) {
+    return response.status(401).json({ error: "Unauthorized" });
+  }
+  if (song.likes.includes(user._id)) {
+    song.likes.splice(song.likes.indexOf(user._id), 1);
+  } else {
+    song.likes.push(user._id);
+  }
+  await song.save();
+  response.status(200).json(song);
 });
 
 songRouter.delete("/:id", async (request, response) => {

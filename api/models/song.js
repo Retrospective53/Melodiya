@@ -4,8 +4,13 @@ const uniqueValidator = require("mongoose-unique-validator");
 const songSchema = new mongoose.Schema({
   title: { type: String, default: "untitled" },
   artist: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-  fileId: { type: String, required: true },
-  likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User", unique: true }],
+  fileId: { type: String, required: true, unique: true },
+  likes: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
   duration: { type: Number },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
@@ -16,6 +21,7 @@ const songSchema = new mongoose.Schema({
   description: { type: String },
   comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
   picture: { type: String },
+  private: { type: Boolean, default: false },
 });
 
 songSchema.set("toJSON", {

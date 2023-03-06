@@ -77,11 +77,10 @@ const uploadFile = async (fileName, file, mime) => {
 
 const getFileById = async (fileId) => {
   try {
-    // Authorize with Backblaze B2
     await b2.authorize();
     console.log("Authorized successfully!");
 
-    // Download the file to the current directory
+    // download the file to the current directory
     const response = await b2.downloadFileById({
       fileId,
     });

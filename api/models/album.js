@@ -3,12 +3,15 @@ const uniqueValidator = require("mongoose-unique-validator");
 const Song = require("./song");
 
 const albumSchema = new mongoose.Schema({
-  name: { type: String, required: true, unique: true },
+  name: { type: String, required: true },
   songs: [{ type: mongoose.Schema.Types.ObjectId, ref: "Song" }],
   createdAt: { type: Date, default: Date.now },
+  releaseDate: { type: Date },
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   descriptions: { type: String },
   duration: { type: Number },
+  picture: { type: String },
+  private: { type: Boolean, default: false },
 });
 
 albumSchema.pre("save", async function (next) {

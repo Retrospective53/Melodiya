@@ -6,7 +6,7 @@ const commentSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   song: { type: mongoose.Schema.Types.ObjectId, ref: "Song" },
-  likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User", unique: true }],
+  likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 });
 
 commentSchema.set("toJSON", {

@@ -20,4 +20,18 @@ storageRouter.post(
   }
 );
 
+storageRouter.post(
+  "/upload/image",
+  upload.single("file"),
+  async (request, response) => {
+    const filePath = request.file.path;
+    const fileId = await b2Method.uploadFile(
+      request.file.originalname,
+      filePath
+    );
+
+    response.status(201).json({ fileId });
+  }
+);
+
 module.exports = storageRouter;
