@@ -4,6 +4,7 @@ const B2 = require("backblaze-b2");
 const endpointURL = "https://s3.us-east-005.backblazeb2.com";
 const fs = require("fs");
 const BUCKET_ID = process.env.BUCKET_ID;
+const { Readable } = require("stream");
 
 const b2 = new B2({
   applicationKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -59,7 +60,7 @@ const uploadFile = async (fileName, file, mime) => {
     // console.log(responseUpload.data);
     const { authorizationToken, uploadUrl } = responseUpload.data;
 
-    const data = fs.readFileSync(file);
+    const data = Buffer.isBuffer(file) ? file : fs.readFileSync(file);
     const response = await b2.uploadFile({
       uploadUrl,
       uploadAuthToken: authorizationToken,

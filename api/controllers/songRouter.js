@@ -2,10 +2,10 @@ const songRouter = require("express").Router();
 const Song = require("../models/song");
 const Genre = require("../models/genre");
 const User = require("../models/user");
-// const b2Method = require("../storage/backblaze");
-// const multer = require("multer");
-// const upload = multer({ dest: "uploads/" });
-// const mm = require("music-metadata");
+const b2Method = require("../storage/backblaze");
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
+const mm = require("music-metadata");
 
 songRouter.get("/", async (request, response) => {
   const songs = await Song.find({});
@@ -17,8 +17,8 @@ songRouter.get("/:id", async (request, response) => {
   response.status(200).json(song);
 });
 
-songRouter.post("/", async (request, response) => {
-  const { title, genres, image, picture, fileId, duration } = request.body;
+songRouter.post("/", upload.single("file"), async (request, response) => {
+  const { title, genres, image, picture } = request.body;
   const user = request.user;
   if (!user) {
     return response.status(401).json({ error: "Unauthorized" });
@@ -37,25 +37,31 @@ songRouter.post("/", async (request, response) => {
     }
   }
 
-  // const filePath = request.file.path;
-  // const metadata = mm.parseFile(filePath);
-  // const duration = metadata.format.duration;
+  const filePath = request.file.path;
+  const metadata = await mm.parseFile(filePath);
+  const duration = Math.round(metadata.format.duration);
+  console.log(metadata.common.picture[0]);
+  const pictureId = await b2Method.uploadFile(
+    "image.jpg",
+    metadata.common.picture[0].data
+  );
+  response.status(201).json(pictureId);
 
   // const fileId = await b2Method.uploadFile(request.file.originalname, filePath);
-  const artist = user._id;
+  // const artist = user._id;
 
-  const song = new Song({
-    title,
-    artist,
-    genres,
-    image,
-    fileId,
-    duration,
-    picture,
-  });
-  const savedSong = await song.save();
-  console.log(savedSong);
-  response.status(201).json(savedSong);
+  // const song = new Song({
+  //   title,
+  //   artist,
+  //   genres,
+  //   image,
+  //   fileId,
+  //   duration,
+  //   picture,
+  // });
+  // const savedSong = await song.save();
+  // console.log(savedSong);
+  // response.status(201).json(savedSong);
 });
 
 songRouter.put("/:id/likes", async (request, response) => {
