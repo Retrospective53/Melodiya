@@ -6,6 +6,7 @@ const b2Method = require("../storage/backblaze");
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 const mm = require("music-metadata");
+const { request } = require("express");
 
 songRouter.get("/", async (request, response) => {
   const songs = await Song.find({});
@@ -16,6 +17,20 @@ songRouter.get("/:id", async (request, response) => {
   const song = await Song.findById(request.params.id);
   response.status(200).json(song);
 });
+
+songRouter.post(
+  "/metadata",
+  upload.single("song"),
+  async (request, response) => {
+    // const user = request.user;
+
+    const filePath = request.file.path;
+    const metadata = await mm.parseFile(filePath);
+    const duration = Math.round(metadata.format.duration);
+    const pictureId = metadata.common.picture[0].data;
+    response.status(201).json(metadata);
+  }
+);
 
 songRouter.post("/", upload.single("file"), async (request, response) => {
   const { title, genres, image, picture } = request.body;
