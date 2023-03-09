@@ -21,7 +21,7 @@ const songSchema = new mongoose.Schema({
   description: { type: String },
   comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
   picture: { type: String },
-  private: { type: Boolean, default: false },
+  private: { type: Boolean, default: true },
 });
 
 songSchema.set("toJSON", {
