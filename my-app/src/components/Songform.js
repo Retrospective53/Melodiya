@@ -1,12 +1,30 @@
+import Image from "next/image";
 import React, { useState } from "react";
 import musicServices from "../services/music";
+import ImageBuffer from "./ImageBuffer";
 
 const Songform = () => {
   const [file, setFile] = useState(null);
   const [metadata, setMetadata] = useState(null);
+  const [uploadImageUrl, setUploadImageUrl] = useState(null);
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
+  };
+
+  const handleFileImgChange = (e) => {
+    setUploadImageUrl(URL.createObjectURL(e.target.files[0]));
+  };
+
+  const uploadImageForm = () => {
+    return (
+      <div className="flex flex-col space-y-4">
+        <div>
+          <label htmlFor="file-input">Choose an image file:</label>
+          <input type="file" id="file-input" onChange={handleFileImgChange} />
+        </div>
+      </div>
+    );
   };
 
   const handleFileUpload = async () => {
@@ -14,7 +32,7 @@ const Songform = () => {
     setMetadata(response);
   };
 
-  const uploadForm = () => {
+  const uploadForm = ({ metadata }) => {
     return (
       <div className="flex flex-col space-y-4">
         <div className="flex flex-col space-y-2">
@@ -25,29 +43,22 @@ const Songform = () => {
             type="text"
             id="name"
             className="px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="Enter your name"
+            placeholder="Enter title"
+            defaultValue={metadata?.common.title}
           />
         </div>
         <div className="flex flex-col space-y-2">
-          <label htmlFor="email" className="text-gray-600 font-medium">
+          <label htmlFor="genre" className="text-gray-600 font-medium">
             Genre
           </label>
           <input
-            type="email"
-            id="email"
+            type="genre"
+            id="genre"
             className="px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="Enter your email"
+            placeholder="Enter genre"
+            defaultValue={metadata?.common.genre.join(", ")}
           />
         </div>
-        <label htmlFor="email" className="text-gray-600 font-medium">
-          Email
-        </label>
-        <input
-          type="email"
-          id="email"
-          className="px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          placeholder="Enter your email"
-        />
         <div className="flex flex-col space-y-2">
           <label htmlFor="message" className="text-gray-600 font-medium">
             Desription
@@ -56,11 +67,17 @@ const Songform = () => {
             id="message"
             className="px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             rows="5"
-            placeholder="Enter your message"
+            placeholder="Describe your song"
           />
         </div>
         <div>
-          <input type="radio" id="private" value="private" name="privacy" />
+          <input
+            type="radio"
+            id="private"
+            value="private"
+            name="privacy"
+            defaultChecked={true}
+          />
           <label htmlFor="private">Private</label>
           <br />
           <input type="radio" id="public" value="public" name="privacy" />
@@ -80,7 +97,23 @@ const Songform = () => {
     <div className="w-full lg:h-screen">
       <div className="flex flex-col items-center m-auto w-full max-w-[1240px]">
         <div className="w-9/12 grid lg:grid-cols-5 gap-8">
-          <div className="col-span-2">Image</div>
+          <div className="col-span-2">
+            {metadata && metadata.common.picture ? (
+              <ImageBuffer imageBuffer={metadata.common.picture[0].data.data} />
+            ) : (
+              <div>
+                {uploadImageUrl && (
+                  <Image
+                    src={uploadImageUrl}
+                    alt="uploaded image"
+                    width={300}
+                    height={300}
+                  />
+                )}
+                {uploadImageForm()}
+              </div>
+            )}
+          </div>
           <div className="col-span-3">
             <label htmlFor="file-input">Choose a file:</label>
             <input type="file" id="file-input" onChange={handleFileChange} />
@@ -94,7 +127,7 @@ const Songform = () => {
             >
               Metadata
             </button>
-            <div>{uploadForm()}</div>
+            <div>{uploadForm({ metadata })}</div>
           </div>
         </div>
       </div>
