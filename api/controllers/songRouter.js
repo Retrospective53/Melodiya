@@ -25,18 +25,17 @@ songRouter.post(
 
     const filePath = request.file.path;
     const metadata = await mm.parseFile(filePath);
-    const duration = Math.round(metadata.format.duration);
-    // const pictureId = metadata.common.picture[0].data;
     response.status(201).json(metadata);
   }
 );
 
-songRouter.post("/", upload.single("file"), async (request, response) => {
-  const { title, genres, image, picture } = request.body;
-  const user = request.user;
-  if (!user) {
-    return response.status(401).json({ error: "Unauthorized" });
-  }
+songRouter.post("/", upload.array("files"), async (request, response) => {
+  const body = JSON.parse(request.body.files)
+  const { title, genres, artist, duration } = body;
+  // const user = request.user;
+  // if (!user) {
+  //   return response.status(401).json({ error: "Unauthorized" });
+  // }
 
   if (genres) {
     for (let genreName of genres) {
@@ -50,32 +49,28 @@ songRouter.post("/", upload.single("file"), async (request, response) => {
       }
     }
   }
+  
+  const songPath = request.files[0].path;
+  const imagePath = request.files[1].path
+  // const metadata = await mm.parseFile(filePath);
+  // const duration = Math.round(metadata.format.duration);
+  // console.log(metadata.common.picture[0]);
+  const picture = await b2Method.uploadFile(request.files[1].originalname, imagePath);
 
-  const filePath = request.file.path;
-  const metadata = await mm.parseFile(filePath);
-  const duration = Math.round(metadata.format.duration);
-  console.log(metadata.common.picture[0]);
-  const pictureId = await b2Method.uploadFile(
-    "image.jpg",
-    metadata.common.picture[0].data
-  );
-  response.status(201).json(pictureId);
-
-  // const fileId = await b2Method.uploadFile(request.file.originalname, filePath);
+  const fileId = await b2Method.uploadFile(request.files[0].originalname, songPath);
   // const artist = user._id;
-
-  // const song = new Song({
-  //   title,
-  //   artist,
-  //   genres,
-  //   image,
-  //   fileId,
-  //   duration,
-  //   picture,
-  // });
-  // const savedSong = await song.save();
-  // console.log(savedSong);
-  // response.status(201).json(savedSong);
+  // artist
+  const song = new Song({
+    title,
+    artist,
+    genres,
+    picture,
+    fileId,
+    duration,
+  });
+  const savedSong = await song.save();
+  console.log(savedSong);
+  response.status(201).json(savedSong);
 });
 
 songRouter.put("/:id/likes", async (request, response) => {

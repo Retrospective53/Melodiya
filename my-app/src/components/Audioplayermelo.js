@@ -9,15 +9,8 @@ const Audioplayermelo = () => {
       name: "patchoulo",
       writer: "neet",
       img: "",
-      src: "http://localhost:3003/library.mp3",
+      src: "http://localhost:3003/yana.flac",
       id: 1,
-    },
-    {
-      name: "name",
-      writer: "writer",
-      img: "",
-      src: "http://localhost:3003/euforia.mp3",
-      id: 2,
     },
   ];
   const [music, setMusic] = useState(playList);

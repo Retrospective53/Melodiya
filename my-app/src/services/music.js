@@ -17,4 +17,13 @@ const getSongMetadata = async (song) => {
   return response.data;
 };
 
-export default { getMusic, getSongMetadata };
+const uploadSong = async (files, songData) => {
+  const response = await axios.post(`${baseUrl}/api/songs`, files, songData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
+};
+
+export default { getMusic, getSongMetadata, uploadSong };
