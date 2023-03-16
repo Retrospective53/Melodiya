@@ -18,11 +18,30 @@ const getSongMetadata = async (song) => {
 };
 
 const uploadSong = async (files, songData) => {
-  const response = await axios.post(`${baseUrl}/api/songs`, files, songData, {
+  let progress = 0;
+
+  const config = {
+    onUploadProgress: (progressEvent) => {
+      const percentCompleted = Math.round(
+        (progressEvent.loaded * 100) / progressEvent.total
+      );
+
+      if (percentCompleted !== progress) {
+        progress = percentCompleted;
+        console.log(`Uploading: ${progress}%`);
+      }
+    },
     headers: {
       "Content-Type": "multipart/form-data",
     },
-  });
+  };
+
+  const response = await axios.post(
+    `${baseUrl}/api/songs`,
+    files,
+    songData,
+    config
+  );
   return response.data;
 };
 

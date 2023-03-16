@@ -39,12 +39,8 @@ const getBucketId = async (bucketName) => {
 
 const uploadFile = async (fileName, file, mime) => {
   const onUploadProgress = (event) => {
+    let progress = 0;
     const percentCompleted = Math.round((event.loaded / event.total) * 100);
-    console.log(event);
-    console.log(percentCompleted);
-    if (event) {
-      console.log(event);
-    }
     if (percentCompleted !== progress) {
       progress = percentCompleted;
       console.log(`Uploading: ${progress}%`);

@@ -30,8 +30,8 @@ songRouter.post(
 );
 
 songRouter.post("/", upload.array("files"), async (request, response) => {
-  const body = JSON.parse(request.body.files)
-  const { title, genres, artist, duration } = body;
+  const body = JSON.parse(request.body.files);
+  const { title, genres, artist, duration, private } = body;
   // const user = request.user;
   // if (!user) {
   //   return response.status(401).json({ error: "Unauthorized" });
@@ -49,15 +49,21 @@ songRouter.post("/", upload.array("files"), async (request, response) => {
       }
     }
   }
-  
+
   const songPath = request.files[0].path;
-  const imagePath = request.files[1].path
+  const imagePath = request.files[1].path;
   // const metadata = await mm.parseFile(filePath);
   // const duration = Math.round(metadata.format.duration);
   // console.log(metadata.common.picture[0]);
-  const picture = await b2Method.uploadFile(request.files[1].originalname, imagePath);
+  const picture = await b2Method.uploadFile(
+    request.files[1].originalname,
+    imagePath
+  );
 
-  const fileId = await b2Method.uploadFile(request.files[0].originalname, songPath);
+  const fileId = await b2Method.uploadFile(
+    request.files[0].originalname,
+    songPath
+  );
   // const artist = user._id;
   // artist
   const song = new Song({
@@ -67,6 +73,7 @@ songRouter.post("/", upload.array("files"), async (request, response) => {
     picture,
     fileId,
     duration,
+    private,
   });
   const savedSong = await song.save();
   console.log(savedSong);

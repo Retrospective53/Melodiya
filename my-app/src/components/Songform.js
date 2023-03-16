@@ -7,6 +7,7 @@ import { Buffer } from "buffer";
 const Songform = () => {
   const titleRef = useRef();
   const descriptionRef = useRef();
+  const isPrivateRef = useRef();
   const [song, setSong] = useState(null);
   const [image, setImage] = useState(null);
   const [metadata, setMetadata] = useState(null);
@@ -21,6 +22,7 @@ const Songform = () => {
     // metadata && metadata.common.picture
     //   ? idk(metadata.common.picture[0].data.data)
     setUploadImageUrl(URL.createObjectURL(e.target.files[0]));
+    setImage(e.target.files[0]);
   };
 
   const handleFileInput = async (e) => {
@@ -28,7 +30,6 @@ const Songform = () => {
     await setSong(selectedFile);
     const response = await musicServices.getSongMetadata(selectedFile);
     setMetadata(response);
-    response.common.picture && setImage(response.common.picture[0]);
   };
 
   const uploadImageForm = () => {
@@ -50,23 +51,32 @@ const Songform = () => {
       title: titleRef.current.value,
       description: descriptionRef.current.value,
       duration: Math.round(metadata.format.duration),
+      private: isPrivateRef.current.checked,
       // genres: song.genres,
     };
 
-    const buffer = await Buffer.from(metadata.common.picture[0].data.data);
-    const blob = new Blob([buffer], {
-      type: metadata.common.picture[0].format,
-    });
+    if (!metadata.common.picture) {
+      const files = new FormData();
+      await files.append("files", song);
+      await files.append("files", image, `${titleRef.current.value}.jpg`);
+      await files.append("files", JSON.stringify(songData));
 
-    const files = new FormData();
-    await files.append("files", song);
-    await files.append("files", blob, 
-      `${titleRef.current.value}.jpg`,
-    );
-    await files.append("files", JSON.stringify(songData))
+      const response = await musicServices.uploadSong(files);
+      // console.log(response);
+    } else {
+      const buffer = await Buffer.from(metadata.common.picture[0].data.data);
+      const blob = new Blob([buffer], {
+        type: metadata.common.picture[0].format,
+      });
 
-    const response = await musicServices.uploadSong(files);
-    console.log(response);
+      const files = new FormData();
+      await files.append("files", song);
+      await files.append("files", blob, `${titleRef.current.value}.jpg`);
+      await files.append("files", JSON.stringify(songData));
+
+      const response = await musicServices.uploadSong(files);
+      // console.log(response);
+    }
   };
 
   const uploadForm = ({ metadata }) => {
@@ -96,7 +106,9 @@ const Songform = () => {
               id="genre"
               className="px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Enter genre"
-              defaultValue={metadata?.common.genre.join(", ")}
+              defaultValue={
+                metadata.common.genre ? metadata.common.genre.join(", ") : ""
+              }
             />
           </div>
           <div className="flex flex-col space-y-2">
@@ -113,6 +125,7 @@ const Songform = () => {
           </div>
           <div>
             <input
+              ref={isPrivateRef}
               type="radio"
               id="private"
               value="private"
@@ -130,6 +143,7 @@ const Songform = () => {
           >
             Submit
           </button>
+          {/* Insert progressbar loading here */}
         </form>
       </div>
     );
@@ -161,7 +175,7 @@ const Songform = () => {
             <input type="file" id="file-input" onInput={handleFileInput} />
             <button
               onClick={() => {
-                console.log(metadata);
+                console.log(isPrivateRef.current.checked);
               }}
             >
               Metadata
