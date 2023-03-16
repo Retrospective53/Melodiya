@@ -6,6 +6,7 @@ const b2Method = require("../storage/backblaze");
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 const mm = require("music-metadata");
+const fs = require("fs");
 
 songRouter.get("/", async (request, response) => {
   const songs = await Song.find({});
@@ -25,6 +26,11 @@ songRouter.post(
 
     const filePath = request.file.path;
     const metadata = await mm.parseFile(filePath);
+    fs.unlink(filePath, (error) => {
+      if (error) {
+        console.log(error);
+      }
+    });
     response.status(201).json(metadata);
   }
 );
@@ -77,6 +83,16 @@ songRouter.post("/", upload.array("files"), async (request, response) => {
   });
   const savedSong = await song.save();
   console.log(savedSong);
+  fs.unlink(songPath, (error) => {
+    if (error) {
+      console.log(error);
+    }
+  });
+  fs.unlink(imagePath, (error) => {
+    if (error) {
+      console.log(error);
+    }
+  });
   response.status(201).json(savedSong);
 });
 
