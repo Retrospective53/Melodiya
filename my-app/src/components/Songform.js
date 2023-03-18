@@ -26,6 +26,7 @@ const Songform = () => {
   };
 
   const handleFileInput = async (e) => {
+    setMetadata(null);
     const selectedFile = e.target.files[0];
     await setSong(selectedFile);
     const response = await musicServices.getSongMetadata(selectedFile);
@@ -95,7 +96,9 @@ const Songform = () => {
               placeholder="Enter title"
               defaultValue={metadata?.common.title}
             />
-            <div>{`${Math.round(metadata.format.duration)} seconds`}</div>
+            <div>{`Duration: ${Math.round(
+              metadata.format.duration
+            )} seconds`}</div>
           </div>
           <div className="flex flex-col space-y-2">
             <label htmlFor="genre" className="text-gray-600 font-medium">

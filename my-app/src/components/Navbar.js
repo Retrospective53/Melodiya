@@ -59,10 +59,12 @@ const Nabvar = () => {
               <li className="ml-10 text-sm uppercase hover:border-b">Home</li>
             </Link>
             <Link href="/" scroll={false}>
-              <li className="ml-10 text-sm uppercase hover:border-b">About</li>
+              <li className="ml-10 text-sm uppercase hover:border-b">
+                Library
+              </li>
             </Link>
             <Link href="/" scroll={false}>
-              <li className="ml-10 text-sm uppercase hover:border-b">Skills</li>
+              <li className="ml-10 text-sm uppercase hover:border-b">Upload</li>
             </Link>
             <Link href="/" scroll={false}>
               <li className="ml-10 text-sm uppercase hover:border-b">
@@ -70,7 +72,9 @@ const Nabvar = () => {
               </li>
             </Link>
             <Link href="/" scroll={false}>
-              <li className="ml-10 text-sm uppercase hover:border-b">Music</li>
+              <li className="ml-10 text-sm uppercase hover:border-b">
+                Profile
+              </li>
             </Link>
           </ul>
           <div onClick={handleNav} className="md:hidden hover:cursor-pointer">

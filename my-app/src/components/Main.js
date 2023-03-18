@@ -1,4 +1,5 @@
-import Audioplayermelo from "./Audioplayermelo";
+// import Audioplayermelo from "./Audioplayermelo";
+import SongList from "./HomeSong";
 import Songform from "./Songform";
 
 const Main = () => {
@@ -6,7 +7,8 @@ const Main = () => {
     <div className="w-full h-screen pt-20">
       <div>lololol</div>
       {/* <Audioplayermelo /> */}
-      <Songform />
+      {/* <Songform /> */}
+      <SongList />
     </div>
   );
 };

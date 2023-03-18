@@ -6,6 +6,10 @@ const fs = require("fs");
 const BUCKET_ID = process.env.BUCKET_ID;
 const { Readable } = require("stream");
 
+const downloadUrl = "https://f005.backblazeb2.com/file/mp3Buckets";
+const downloadUrlById =
+  "https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=";
+
 const b2 = new B2({
   applicationKeyId: process.env.AWS_ACCESS_KEY_ID,
   applicationKey: process.env.AWS_SECRET_ACCESS_KEY,
@@ -104,6 +108,16 @@ const getFileInfo = async (fileId) => {
   }
 };
 
+const getFileDownloadUrl = async (fileId) => {
+  try {
+    const response = { data: `${downloadUrlById}${fileId}` };
+    console.log(response.data);
+    return response.data;
+  } catch (err) {
+    console.error("Error:", err);
+  }
+};
+
 // getFileById(
 //   "4_z8e01a377aea4942481620a1b_f1051c760cdbedf29_d20230304_m001625_c005_v0501005_t0044_u01677888985542"
 // );
@@ -114,4 +128,5 @@ module.exports = {
   uploadFile,
   getFileById,
   getFileInfo,
+  getFileDownloadUrl,
 };

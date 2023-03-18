@@ -2,7 +2,24 @@ import axios from "axios";
 const baseUrl = "http://localhost:3003";
 
 const getMusic = async () => {
-  const response = await axios.get(`${baseUrl}/library.mp3`);
+  const response = await axios.get(`${baseUrl}/api/songs`);
+  return response.data;
+};
+
+const getFile = async (fileId) => {
+  const response = await axios.get(`${baseUrl}/api/storage/${fileId}`);
+  return response.data;
+};
+
+const getFileInfo = async (fileId) => {
+  const response = await axios.get(`${baseUrl}/api/storage/${fileId}/info`);
+  return response.data;
+};
+
+const getDownloadUrlById = async (fileId) => {
+  const response = await axios.get(
+    `${baseUrl}/api/storage/${fileId}/downloadUrl`
+  );
   return response.data;
 };
 
@@ -45,4 +62,4 @@ const uploadSong = async (files, songData) => {
   return response.data;
 };
 
-export default { getMusic, getSongMetadata, uploadSong };
+export default { getMusic, getSongMetadata, uploadSong, getFile, getFileInfo };
