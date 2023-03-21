@@ -153,9 +153,9 @@ const Songform = () => {
   };
 
   return (
-    <div className="w-full lg:h-screen">
+    <div className="w-full min-h-screen">
       <div className="flex flex-col items-center m-auto w-full max-w-[1240px]">
-        <div className="w-9/12 grid lg:grid-cols-5 gap-8">
+        <div className="w-9/12 grid lg:grid-cols-5 gap-8 justify-items-center">
           {metadata && (
             <div className="col-span-2">
               {metadata.common.picture ? (
@@ -177,7 +177,7 @@ const Songform = () => {
               )}
             </div>
           )}
-          <div className="col-span-3">
+          <div className={metadata ? "col-span-3" : "col-span-5"}>
             <label htmlFor="file-input">Choose a song:</label>
             <input type="file" id="file-input" onInput={handleFileInput} />
             <button
