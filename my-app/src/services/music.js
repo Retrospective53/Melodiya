@@ -6,6 +6,11 @@ const getMusic = async () => {
   return response.data;
 };
 
+const getAMusic = async () => {
+  const response = await axios.get(`${baseUrl}/api/songs/:id`);
+  return response.data;
+};
+
 const getFile = async (fileId) => {
   const response = await axios.get(`${baseUrl}/api/storage/${fileId}`);
   return response.data;
@@ -62,4 +67,11 @@ const uploadSong = async (files, songData) => {
   return response.data;
 };
 
-export default { getMusic, getSongMetadata, uploadSong, getFile, getFileInfo };
+export default {
+  getMusic,
+  getAMusic,
+  getSongMetadata,
+  uploadSong,
+  getFile,
+  getFileInfo,
+};

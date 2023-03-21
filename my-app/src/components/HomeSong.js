@@ -65,6 +65,7 @@ const SongList = () => {
       const handleSongClick = () => {
         setSelectedSong(music);
       };
+
       return (
         <div
           onClick={handleSongClick}
@@ -72,7 +73,14 @@ const SongList = () => {
         >
           <div className="mb-4 md:mb-0 md:w-20 ">
             {picture && (
-              <img className="w-full object-cover" src={imgUrl} alt={title} />
+              <Image
+                loader={() => imgUrl}
+                className="w-full object-cover"
+                src={imgUrl}
+                alt={title}
+                height={100}
+                width={100}
+              />
             )}
           </div>
           <div className="md:w-2/3 md:pl-4">
@@ -131,6 +139,7 @@ const SongList = () => {
       <div>
         {mList && mList.map((m) => musicDisplay(m))}
         {playList && <Audioplayermelo playList={playList} />}
+        <button onClick={() => console.log(musics)}>check</button>
       </div>
     );
   };
