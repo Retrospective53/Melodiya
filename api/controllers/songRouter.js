@@ -57,14 +57,15 @@ songRouter.post("/", upload.array("files"), async (request, response) => {
   }
 
   const songPath = request.files[0].path;
-  const imagePath = request.files[1].path;
-  // const metadata = await mm.parseFile(filePath);
-  // const duration = Math.round(metadata.format.duration);
-  // console.log(metadata.common.picture[0]);
-  const picture = await b2Method.uploadFile(
-    request.files[1].originalname,
-    imagePath
-  );
+
+  let picture;
+  if (request.files[1]) {
+    const imagePath = request.files[1].path;
+    picture = await b2Method.uploadFile(
+      request.files[1].originalname,
+      imagePath
+    );
+  }
 
   const fileId = await b2Method.uploadFile(
     request.files[0].originalname,
@@ -88,11 +89,13 @@ songRouter.post("/", upload.array("files"), async (request, response) => {
       console.log(error);
     }
   });
-  fs.unlink(imagePath, (error) => {
-    if (error) {
-      console.log(error);
-    }
-  });
+  if (imagePath) {
+    fs.unlink(imagePath, (error) => {
+      if (error) {
+        console.log(error);
+      }
+    });
+  }
   response.status(201).json(savedSong);
 });
 

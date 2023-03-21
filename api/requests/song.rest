@@ -7,3 +7,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1vb
   "fileId": "4_z82e021a3e772aea4942481620a1b_f10557543f9226aeb4a_d20230304_m030715_c005_v0501003_t0025_u01677899235238",
   "duration" : 223
 }
+
+###
+GET http://localhost:3003/api/songs/64135ee108cba8f12859b9b0
