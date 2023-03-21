@@ -1,19 +1,8 @@
 import React from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import AudioPlayer from "react-modern-audio-player";
-import musicServices from "../services/music";
 
-const Audioplayermelo = () => {
-  const playList = [
-    {
-      name: "patchoulo",
-      writer: "neet",
-      img: "",
-      src: "http://localhost:3003/yana.flac",
-      id: 1,
-    },
-  ];
-  const [music, setMusic] = useState(playList);
+const Audioplayermelo = ({ playList }) => {
   const [placement, setPlacement] = useState("static");
 
   const progress = {
@@ -32,51 +21,12 @@ const Audioplayermelo = () => {
     <div>
       <div>
         <AudioPlayer
-          playList={music}
+          playList={playList}
           activeUI={progress}
-          placement={{ player: placement }}
+          placement={{ player: "bottom" }}
           autoPlay={true}
         />
       </div>
-      {/* <button
-        onClick={() => {
-          setPlacement("bottom-left");
-        }}
-      >
-        bottom
-      </button>
-      <button
-        onClick={() => {
-          setPlacement("bottom-right");
-        }}
-      >
-        top
-      </button>
-      <div>
-        <button
-          onClick={() => {
-            setMusic([
-              ...music,
-              {
-                name: "patchoulowe",
-                writer: "neet",
-                img: "",
-                src: "http://localhost:3003/library.mp3",
-                id: 3,
-              },
-            ]);
-          }}
-        >
-          asdas
-        </button>
-        <button
-          onClick={() => {
-            setMusic("http://localhost:3003/euforia.mp3");
-          }}
-        >
-          change
-        </button>
-      </div> */}
     </div>
   );
 };

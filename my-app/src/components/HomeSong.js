@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import musicServices from "@/services/music";
 import Image from "next/image";
+import Audioplayermelo from "./Audioplayermelo";
 
 // return (
 //   <div className="bg-slate-600">
@@ -13,9 +14,30 @@ import Image from "next/image";
 // );
 
 const SongList = () => {
-  const [musics, setMusics] = useState();
+  const [selectedSong, setSelectedSong] = useState(null);
+  const [musics, setMusics] = useState([]);
   const downloadUrlById =
     "https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=";
+
+  const playList = selectedSong
+    ? [
+        {
+          name: selectedSong.title,
+          writer: "",
+          img: `${downloadUrlById}${selectedSong.picture}`,
+          src: `${downloadUrlById}${selectedSong.fileId}`,
+          id: 1,
+        },
+      ]
+    : null;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await musicServices.getMusic();
+      setMusics(response);
+    };
+    fetchData();
+  }, []);
 
   const musicList = (mList) => {
     const mock = {
@@ -37,17 +59,20 @@ const SongList = () => {
     };
 
     const musicDisplay = (music) => {
-      const { title, duration, likes, playCount, picture } = music;
-      const imgUrl = `${downloadUrlById}${music.picture}`;
+      const { title, duration, likes, playCount, picture, fileId } = music;
+      const imgUrl = `${downloadUrlById}${picture}`;
+
+      const handleSongClick = () => {
+        setSelectedSong(music);
+      };
       return (
-        <div className="bg-gray-800 rounded-lg p-4 flex flex-col md:flex-row md:items-center">
-          <div className="md:w-1/3 mb-4 md:mb-0 ">
+        <div
+          onClick={handleSongClick}
+          className="bg-gray-800 p-4 flex flex-col md:flex-row md:items-center cursor-pointer"
+        >
+          <div className="mb-4 md:mb-0 md:w-20 ">
             {picture && (
-              <img
-                className="w-full object-cover rounded-lg"
-                src={imgUrl}
-                alt={title}
-              />
+              <img className="w-full object-cover" src={imgUrl} alt={title} />
             )}
           </div>
           <div className="md:w-2/3 md:pl-4">
@@ -102,21 +127,15 @@ const SongList = () => {
       );
     };
 
-    return <div>{mList && mList.map((m) => musicDisplay(m))}</div>;
+    return (
+      <div>
+        {mList && mList.map((m) => musicDisplay(m))}
+        {playList && <Audioplayermelo playList={playList} />}
+      </div>
+    );
   };
 
-  const handleClick = async () => {
-    const response = await musicServices.getMusic();
-    setMusics(response);
-  };
-
-  return (
-    <div>
-      <button onClick={handleClick}>Get Music</button>
-      <button onClick={() => console.log(musics)}>Check musics</button>
-      {musics && musicList(musics)}
-    </div>
-  );
+  return <div>{musics && musicList(musics)}</div>;
 };
 
 export default SongList;
