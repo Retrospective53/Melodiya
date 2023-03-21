@@ -6,6 +6,7 @@ import SongCard from "@/components/SongStatus/SongCard";
 import "../../app/globals.css";
 import Nabvar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SongPage from "@/components/SongStatus/SongPage";
 
 const Songb = ({ post }) => {
   const router = useRouter();
@@ -18,7 +19,7 @@ const Songb = ({ post }) => {
     <div>
       <Nabvar />
       <button onClick={() => console.log(post)}>check post</button>
-      <SongCard song={post} />
+      <SongPage song={post} />
       <Footer />
     </div>
   );

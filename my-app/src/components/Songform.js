@@ -59,7 +59,9 @@ const Songform = () => {
     if (!metadata.common.picture) {
       const files = new FormData();
       await files.append("files", song);
-      await files.append("files", image, `${titleRef.current.value}.jpg`);
+      if (image) {
+        await files.append("files", image, `${titleRef.current.value}.jpg`);
+      }
       await files.append("files", JSON.stringify(songData));
 
       const response = await musicServices.uploadSong(files);

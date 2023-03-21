@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import musicServices from "@/services/music";
 import Image from "next/image";
 import Audioplayermelo from "./Audioplayermelo";
+import Link from "next/link";
 
 // return (
 //   <div className="bg-slate-600">
@@ -59,7 +60,7 @@ const SongList = () => {
     };
 
     const musicDisplay = (music) => {
-      const { title, duration, likes, playCount, picture, fileId } = music;
+      const { title, duration, likes, playCount, picture, id } = music;
       const imgUrl = `${downloadUrlById}${picture}`;
 
       const handleSongClick = () => {
@@ -67,12 +68,12 @@ const SongList = () => {
       };
 
       return (
-        <div
-          onClick={handleSongClick}
-          className="bg-gray-800 p-4 flex flex-col md:flex-row md:items-center cursor-pointer mb-3"
-        >
-          <div className="mb-4 md:mb-0 md:w-20 ">
-            {picture && (
+        <div className="bg-gray-800 p-4 flex flex-col md:flex-row md:items-center mb-3">
+          <div
+            className="mb-4 md:mb-0 md:w-20 cursor-pointer bg-slate-200"
+            onClick={handleSongClick}
+          >
+            {picture ? (
               <Image
                 loader={() => imgUrl}
                 className="w-full object-cover"
@@ -81,10 +82,14 @@ const SongList = () => {
                 height={100}
                 width={100}
               />
+            ) : (
+              <div className="bg-slate-400 h-16"></div>
             )}
           </div>
           <div className="md:w-2/3 md:pl-4">
-            <h3 className="text-2xl font-bold text-white mb-2">{title}</h3>
+            <Link href={`/song/${id}`}>
+              <h3 className="text-2xl font-bold text-white mb-2">{title}</h3>
+            </Link>
             <div className="flex items-center text-gray-400 mb-2">
               <svg
                 className="w-4 h-4 fill-current mr-2"
@@ -139,7 +144,7 @@ const SongList = () => {
       <div>
         {mList && mList.map((m) => musicDisplay(m))}
         {playList && <Audioplayermelo playList={playList} />}
-        <button onClick={() => console.log(musics)}>check</button>
+        {/* <button onClick={() => console.log(musics)}>check</button> */}
       </div>
     );
   };
