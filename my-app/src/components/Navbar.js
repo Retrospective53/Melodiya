@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
+import "../app/globals.css";
 
 const Nabvar = () => {
   const [nav, setNav] = useState(false);
@@ -45,13 +46,7 @@ const Nabvar = () => {
     >
       <div className="flex justify-between items-center w-full h-full px-2 2xl:px-16">
         <Link href="/">
-          {/* <Image
-            src="/../public/assets/navLogo.png"
-            alt="/"
-            width="80"
-            height="50"
-          /> */}
-          asdasd
+          <Image src="/assets/Logo.jpg" alt="/" width="200" height="100" />
         </Link>
         <div>
           <ul style={{ color: `${linkColor}` }} className="hidden md:flex">
@@ -63,7 +58,7 @@ const Nabvar = () => {
                 Library
               </li>
             </Link>
-            <Link href="/" scroll={false}>
+            <Link href="/upload" scroll={false}>
               <li className="ml-10 text-sm uppercase hover:border-b">Upload</li>
             </Link>
             <Link href="/" scroll={false}>
@@ -115,7 +110,7 @@ const Nabvar = () => {
             </div>
             <div className="border-b border-gray-300 my-4 ">
               <p className="w-[86%] md:w-[90%] py-4">
-                Let's do something together
+                Let&apos;s do something together
               </p>
             </div>
             <div className="py-4 flex-col">
@@ -138,7 +133,7 @@ const Nabvar = () => {
               </ul>
               <div className="pt-16">
                 <p className="uppercase tracking-widest text-[#5651e5]">
-                  Let's connect
+                  Let&apos;s connect
                 </p>
                 <div className="flex items-center justify-between w-full sm:w-[80%]">
                   <a

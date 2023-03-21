@@ -68,7 +68,7 @@ const SongList = () => {
       return (
         <div
           onClick={handleSongClick}
-          className="bg-gray-800 p-4 flex flex-col md:flex-row md:items-center cursor-pointer"
+          className="bg-gray-800 p-4 flex flex-col md:flex-row md:items-center cursor-pointer mb-3"
         >
           <div className="mb-4 md:mb-0 md:w-20 ">
             {picture && (

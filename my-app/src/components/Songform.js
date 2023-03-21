@@ -156,23 +156,27 @@ const Songform = () => {
     <div className="w-full lg:h-screen">
       <div className="flex flex-col items-center m-auto w-full max-w-[1240px]">
         <div className="w-9/12 grid lg:grid-cols-5 gap-8">
-          <div className="col-span-2">
-            {metadata && metadata.common.picture ? (
-              <ImageBuffer imageBuffer={metadata.common.picture[0].data.data} />
-            ) : (
-              <div>
-                {uploadImageUrl && (
-                  <Image
-                    src={uploadImageUrl}
-                    alt="uploaded image"
-                    width={300}
-                    height={300}
-                  />
-                )}
-                {uploadImageForm()}
-              </div>
-            )}
-          </div>
+          {metadata && (
+            <div className="col-span-2">
+              {metadata.common.picture ? (
+                <ImageBuffer
+                  imageBuffer={metadata.common.picture[0].data.data}
+                />
+              ) : (
+                <div>
+                  {uploadImageUrl && (
+                    <Image
+                      src={uploadImageUrl}
+                      alt="uploaded image"
+                      width={300}
+                      height={300}
+                    />
+                  )}
+                  {uploadImageForm()}
+                </div>
+              )}
+            </div>
+          )}
           <div className="col-span-3">
             <label htmlFor="file-input">Choose a song:</label>
             <input type="file" id="file-input" onInput={handleFileInput} />
