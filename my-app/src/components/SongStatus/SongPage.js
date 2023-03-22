@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import musicServices from "../../services/music";
 
 const SongPage = ({ song }) => {
+  const handleClickDelete = () => {
+    musicServices.deleteSong(song.id);
+  };
+
   const pictureUrl = `https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=${song.picture}`;
   if (!song) {
     return <div>Loading...</div>;
@@ -28,6 +33,11 @@ const SongPage = ({ song }) => {
               Play
             </button>
           </div>
+          <div className="mt-4" onClick={handleClickDelete}>
+            <button className=" text-white font-bold py-2 px-4 rounded bg-red-800">
+              Delete Song
+            </button>
+          </div>
         </div>
         <div>
           <h2 className="text-2xl font-bold">Comments</h2>
@@ -41,7 +51,7 @@ const SongPage = ({ song }) => {
           ) : (
             <p>No comments yet.</p>
           )}
-          <form className="mt-4">
+          <form className="mt-4" onSubmit={(e) => e.preventDefault()}>
             <div className="flex flex-col">
               <label className="text-lg font-bold">Add a comment</label>
               <textarea className="mt-2 border rounded p-2"></textarea>

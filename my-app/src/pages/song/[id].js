@@ -2,7 +2,6 @@ import React from "react";
 import musicServices from "../../services/music";
 import axios from "axios";
 import { useRouter } from "next/router";
-import SongCard from "@/components/SongStatus/SongCard";
 import "../../app/globals.css";
 import Nabvar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -19,7 +18,9 @@ const Songb = ({ post }) => {
     <div>
       <Nabvar />
       <button onClick={() => console.log(post)}>check post</button>
-      <SongPage song={post} />
+      <div className="mt-20">
+        <SongPage song={post} />
+      </div>
       <Footer />
     </div>
   );

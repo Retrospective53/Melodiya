@@ -1,6 +1,5 @@
 import React from "react";
-import { useState } from "react";
-import AudioPlayer from "react-modern-audio-player";
+import { useState, lazy, Suspense } from "react";
 
 const Audioplayermelo = ({ playList }) => {
   const [placement, setPlacement] = useState("static");
@@ -17,15 +16,20 @@ const Audioplayermelo = ({ playList }) => {
     artwork: true,
     progress: "bar",
   };
+
+  const AudioPlayer = lazy(() => import("react-modern-audio-player"));
+
   return (
     <div>
       <div>
-        <AudioPlayer
-          playList={playList}
-          activeUI={progress}
-          placement={{ player: "bottom" }}
-          autoPlay={true}
-        />
+        <Suspense fallback={<div>Loading...</div>}>
+          <AudioPlayer
+            playList={playList}
+            activeUI={progress}
+            placement={{ player: "bottom" }}
+            autoPlay={true}
+          />
+        </Suspense>
       </div>
     </div>
   );

@@ -89,8 +89,8 @@ songRouter.post("/", upload.array("files"), async (request, response) => {
       console.log(error);
     }
   });
-  if (imagePath) {
-    fs.unlink(imagePath, (error) => {
+  if (request.files[1].path) {
+    fs.unlink(request.files[1].path, (error) => {
       if (error) {
         console.log(error);
       }
@@ -116,6 +116,12 @@ songRouter.put("/:id/likes", async (request, response) => {
 
 songRouter.delete("/:id", async (request, response) => {
   const song = await Song.findById(request.params.id);
+  const { fileId, picture } = song;
+
+  await b2Method.deleteFilebyId(fileId);
+  if (picture) {
+    await b2Method.deleteFilebyId(picture);
+  }
   await song.remove();
   response.status(204).end();
 });

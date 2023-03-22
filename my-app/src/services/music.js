@@ -21,6 +21,11 @@ const getFileInfo = async (fileId) => {
   return response.data;
 };
 
+const deleteSong = async (fileId) => {
+  const response = await axios.delete(`${baseUrl}/api/songs/${fileId}`);
+  return response.data;
+};
+
 const getDownloadUrlById = async (fileId) => {
   const response = await axios.get(
     `${baseUrl}/api/storage/${fileId}/downloadUrl`
@@ -74,4 +79,6 @@ export default {
   uploadSong,
   getFile,
   getFileInfo,
+  getDownloadUrlById,
+  deleteSong,
 };

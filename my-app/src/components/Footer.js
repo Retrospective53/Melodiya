@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 function Footer() {
@@ -8,20 +9,24 @@ function Footer() {
       </p>
       <ul className="flex justify-center">
         <li className="mr-6">
-          <a
-            href="https://github.com/johndoe"
+          <Link
+            href="https://github.com/Retrospective53"
             className="text-blue-500 hover:text-blue-700"
+            rel="noreferrer noopener"
+            target="_blank"
           >
             GitHub
-          </a>
+          </Link>
         </li>
         <li className="mr-6">
-          <a
-            href="https://www.linkedin.com/in/johndoe/"
+          <Link
+            href="https://www.linkedin.com/in/harry-pamungkas-9aa6801a5/"
             className="text-blue-500 hover:text-blue-700"
+            rel="noreferrer noopener"
+            target="_blank"
           >
             LinkedIn
-          </a>
+          </Link>
         </li>
       </ul>
     </footer>

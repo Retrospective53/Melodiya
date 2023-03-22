@@ -108,6 +108,29 @@ const getFileInfo = async (fileId) => {
   }
 };
 
+const deleteFilebyId = async (fileId) => {
+  try {
+    await b2.authorize();
+    console.log("Authorized successfully!");
+
+    // download the file to the current directory
+    const fileInfo = await b2.getFileInfo({
+      fileId,
+    });
+    const { fileName } = fileInfo.data;
+
+    const deleteFile = await b2.deleteFileVersion({
+      fileId,
+      fileName,
+    });
+
+    console.log(`${fileName} succesfully deleted`);
+    return deleteFile.data;
+  } catch (err) {
+    console.error("Error:", err);
+  }
+};
+
 const getFileDownloadUrl = async (fileId) => {
   try {
     const response = { data: `${downloadUrlById}${fileId}` };
@@ -129,4 +152,5 @@ module.exports = {
   getFileById,
   getFileInfo,
   getFileDownloadUrl,
+  deleteFilebyId,
 };
