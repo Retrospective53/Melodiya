@@ -66,7 +66,7 @@ const Nabvar = () => {
                 Projects
               </li>
             </Link>
-            <Link href="/" scroll={false}>
+            <Link href="/login" scroll={false}>
               <li className="ml-10 text-sm uppercase hover:border-b">
                 Profile
               </li>

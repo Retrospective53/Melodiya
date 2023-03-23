@@ -10,19 +10,20 @@ const requestLogger = (req, res, next) => {
   next();
 };
 
-const tokenExtractor = (request, response, next) => {
-  request.token = request.get("authorization");
-  if (request.token && request.token.startsWith("Bearer ")) {
-    request.token = request.token.replace("Bearer ", "");
+const tokenExtractor = (req, res, next) => {
+  req.token = req.cookies.token;
+  if (!req.token) {
+    return res.status(401).json({ error: "please login" });
   }
+
   next();
 };
 
-const userExtractor = async (request, response, next) => {
-  const decodedToken = jwt.verify(request.token, process.env.SECRET);
+const userExtractor = async (req, res, next) => {
+  const decodedToken = jwt.verify(req.token, process.env.SECRET);
 
   const user = await User.findById(decodedToken.id);
-  request.user = user;
+  req.user = user;
   next();
 };
 
@@ -30,19 +31,17 @@ const unknownEndpoint = (req, res) => {
   res.status(404).send({ error: "unknown endpoint" });
 };
 
-const errorHandler = (error, request, response, next) => {
+const errorHandler = (error, req, res, next) => {
   console.error(error.message);
 
   if (error.name === "ValidationError") {
-    return response
-      .status(400)
-      .send({ error: "expected `username` to be unique" });
+    return res.status(400).send({ error: "expected `username` to be unique" });
   } else if (error.name === "JsonWebTokenError") {
-    return response.status(401).json({ error: "token missing or invalid" });
+    return res.status(401).json({ error: "token missing or invalid" });
   } else if (error.name === "TokenExpiredError") {
-    return response.status(401).json({ error: "token expired" });
+    return res.status(401).json({ error: "token expired" });
   } else {
-    response.status(400).send({ error: error.message });
+    res.status(400).send({ error: error.message });
   }
 
   next(error);

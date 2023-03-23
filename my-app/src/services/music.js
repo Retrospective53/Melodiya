@@ -72,6 +72,13 @@ const uploadSong = async (files, songData) => {
   return response.data;
 };
 
+// Auth
+
+const login = async (loginData) => {
+  const response = await axios.post(`${baseUrl}/api/auth/login`, loginData);
+  return response.data;
+};
+
 export default {
   getMusic,
   getAMusic,
@@ -81,4 +88,5 @@ export default {
   getFileInfo,
   getDownloadUrlById,
   deleteSong,
+  login,
 };

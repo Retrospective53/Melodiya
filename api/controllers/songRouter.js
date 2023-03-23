@@ -7,6 +7,7 @@ const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 const mm = require("music-metadata");
 const fs = require("fs");
+const middleware = require("../utils/middleware");
 
 songRouter.get("/", async (request, response) => {
   const songs = await Song.find({});
@@ -21,6 +22,7 @@ songRouter.get("/:id", async (request, response) => {
 songRouter.post(
   "/metadata",
   upload.single("song"),
+  middleware.tokenExtractor,
   async (request, response) => {
     // const user = request.user;
 
@@ -35,84 +37,93 @@ songRouter.post(
   }
 );
 
-songRouter.post("/", upload.array("files"), async (request, response) => {
-  const body = JSON.parse(request.body.files);
-  const { title, genres, artist, duration, private } = body;
-  // const user = request.user;
-  // if (!user) {
-  //   return response.status(401).json({ error: "Unauthorized" });
-  // }
+songRouter.post(
+  "/",
+  upload.array("files"),
+  middleware.tokenExtractor,
+  async (request, response) => {
+    const body = JSON.parse(request.body.files);
+    const { title, genres, artist, duration, private } = body;
+    // const user = request.user;
+    // if (!user) {
+    //   return response.status(401).json({ error: "Unauthorized" });
+    // }
 
-  if (genres) {
-    for (let genreName of genres) {
-      const existingGenre = await Genre.findOne({ name: genreName });
-      if (existingGenre) {
-        song.genres.push(existingGenre._id);
-      } else {
-        const newGenre = new Genre({ name: genreName });
-        const savedGenre = await newGenre.save();
-        song.genres.push(savedGenre._id);
+    if (genres) {
+      for (let genreName of genres) {
+        const existingGenre = await Genre.findOne({ name: genreName });
+        if (existingGenre) {
+          song.genres.push(existingGenre._id);
+        } else {
+          const newGenre = new Genre({ name: genreName });
+          const savedGenre = await newGenre.save();
+          song.genres.push(savedGenre._id);
+        }
       }
     }
-  }
 
-  const songPath = request.files[0].path;
+    const songPath = request.files[0].path;
 
-  let picture;
-  if (request.files[1]) {
-    const imagePath = request.files[1].path;
-    picture = await b2Method.uploadFile(
-      request.files[1].originalname,
-      imagePath
-    );
-  }
-
-  const fileId = await b2Method.uploadFile(
-    request.files[0].originalname,
-    songPath
-  );
-  // const artist = user._id;
-  // artist
-  const song = new Song({
-    title,
-    artist,
-    genres,
-    picture,
-    fileId,
-    duration,
-    private,
-  });
-  const savedSong = await song.save();
-  console.log(savedSong);
-  fs.unlink(songPath, (error) => {
-    if (error) {
-      console.log(error);
+    let picture;
+    if (request.files[1]) {
+      const imagePath = request.files[1].path;
+      picture = await b2Method.uploadFile(
+        request.files[1].originalname,
+        imagePath
+      );
     }
-  });
-  if (request.files[1].path) {
-    fs.unlink(request.files[1].path, (error) => {
+
+    const fileId = await b2Method.uploadFile(
+      request.files[0].originalname,
+      songPath
+    );
+    // const artist = user._id;
+    // artist
+    const song = new Song({
+      title,
+      artist,
+      genres,
+      picture,
+      fileId,
+      duration,
+      private,
+    });
+    const savedSong = await song.save();
+    console.log(savedSong);
+    fs.unlink(songPath, (error) => {
       if (error) {
         console.log(error);
       }
     });
+    if (request.files[1].path) {
+      fs.unlink(request.files[1].path, (error) => {
+        if (error) {
+          console.log(error);
+        }
+      });
+    }
+    response.status(201).json(savedSong);
   }
-  response.status(201).json(savedSong);
-});
+);
 
-songRouter.put("/:id/likes", async (request, response) => {
-  const song = await Song.findById(request.params.id);
-  const user = request.user;
-  if (!user) {
-    return response.status(401).json({ error: "Unauthorized" });
+songRouter.put(
+  "/:id/likes",
+  middleware.tokenExtractor,
+  async (request, response) => {
+    const song = await Song.findById(request.params.id);
+    const user = request.user;
+    if (!user) {
+      return response.status(401).json({ error: "Unauthorized" });
+    }
+    if (song.likes.includes(user._id)) {
+      song.likes.splice(song.likes.indexOf(user._id), 1);
+    } else {
+      song.likes.push(user._id);
+    }
+    await song.save();
+    response.status(200).json(song);
   }
-  if (song.likes.includes(user._id)) {
-    song.likes.splice(song.likes.indexOf(user._id), 1);
-  } else {
-    song.likes.push(user._id);
-  }
-  await song.save();
-  response.status(200).json(song);
-});
+);
 
 songRouter.put("/:id/comments", async (request, response) => {
   const song = await Song.findById(request.params.id);
