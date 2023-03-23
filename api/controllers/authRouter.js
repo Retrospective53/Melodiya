@@ -29,12 +29,12 @@ authRouter.post("/login", async (request, response) => {
     .cookie("token", token, {
       httpOnly: true,
       sameSite: "strict",
-      maxAge: 5 * 60,
+      maxAge: 10 * 60,
     })
-    .sendStatus(200);
+    .send("Cookie Set");
 });
 
-authRouter.post("/logout", async (request, response) => {
+authRouter.get("/logout", async (request, response) => {
   response.clearCookie("token");
   response.send("cookie token cleared");
 });
