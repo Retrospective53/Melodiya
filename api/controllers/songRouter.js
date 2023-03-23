@@ -114,6 +114,10 @@ songRouter.put("/:id/likes", async (request, response) => {
   response.status(200).json(song);
 });
 
+songRouter.put("/:id/comments", async (request, response) => {
+  const song = await Song.findById(request.params.id);
+});
+
 songRouter.delete("/:id", async (request, response) => {
   const song = await Song.findById(request.params.id);
   const { fileId, picture } = song;

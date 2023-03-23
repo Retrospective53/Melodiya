@@ -5,3 +5,6 @@ Content-Type: application/json
   "username": "hehe",
   "password": "shamimomo"
 }
+
+###
+POST http://localhost:3003/api/auth/logout
