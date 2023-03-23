@@ -22,7 +22,7 @@ songRouter.get("/:id", async (request, response) => {
 songRouter.post(
   "/metadata",
   upload.single("song"),
-  middleware.tokenExtractor,
+  middleware.userExtractor,
   async (request, response) => {
     // const user = request.user;
 
@@ -40,14 +40,11 @@ songRouter.post(
 songRouter.post(
   "/",
   upload.array("files"),
-  middleware.tokenExtractor,
+  middleware.userExtractor,
   async (request, response) => {
     const body = JSON.parse(request.body.files);
-    const { title, genres, artist, duration, private } = body;
-    // const user = request.user;
-    // if (!user) {
-    //   return response.status(401).json({ error: "Unauthorized" });
-    // }
+    const { title, genres, duration, private } = body;
+    const user = request.user;
 
     if (genres) {
       for (let genreName of genres) {
@@ -77,7 +74,7 @@ songRouter.post(
       request.files[0].originalname,
       songPath
     );
-    // const artist = user._id;
+    const artist = user._id;
     // artist
     const song = new Song({
       title,
@@ -95,7 +92,7 @@ songRouter.post(
         console.log(error);
       }
     });
-    if (request.files[1].path) {
+    if (request.files[1]) {
       fs.unlink(request.files[1].path, (error) => {
         if (error) {
           console.log(error);

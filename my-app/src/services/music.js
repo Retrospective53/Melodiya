@@ -37,6 +37,7 @@ const getSongMetadata = async (song) => {
   const formData = new FormData();
   formData.append("song", song);
   const response = await axios.post(`${baseUrl}/api/songs/metadata`, formData, {
+    withCredentials: true,
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -44,31 +45,23 @@ const getSongMetadata = async (song) => {
   return response.data;
 };
 
-const uploadSong = async (files, songData) => {
-  let progress = 0;
+const uploadSong = async (files) => {
+  // let progress = 0;
+  const onUploadProgress = (progressEvent) => {
+    const { loaded, total } = progressEvent;
+    const percentCompleted = Math.round((loaded * 100) / total);
+    console.log(`Uploading: ${percentCompleted}%`);
+  };
 
   const config = {
-    onUploadProgress: (progressEvent) => {
-      const percentCompleted = Math.round(
-        (progressEvent.loaded * 100) / progressEvent.total
-      );
-
-      if (percentCompleted !== progress) {
-        progress = percentCompleted;
-        console.log(`Uploading: ${progress}%`);
-      }
-    },
+    withCredentials: true,
+    onUploadProgress,
     headers: {
       "Content-Type": "multipart/form-data",
     },
   };
 
-  const response = await axios.post(
-    `${baseUrl}/api/songs`,
-    files,
-    songData,
-    config
-  );
+  const response = await axios.post(`${baseUrl}/api/songs`, files, config);
   return response.data;
 };
 

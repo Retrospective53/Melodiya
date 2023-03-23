@@ -1,10 +1,14 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import musicServices from "../../services/music";
+import { useRouter } from "next/router";
 
 const SongPage = ({ song }) => {
-  const handleClickDelete = () => {
-    musicServices.deleteSong(song.id);
+  const router = useRouter();
+
+  const handleClickDelete = async () => {
+    await musicServices.deleteSong(song.id);
+    router.push("/");
   };
 
   const pictureUrl = `https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=${song.picture}`;

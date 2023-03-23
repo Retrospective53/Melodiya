@@ -1,19 +1,22 @@
 import React, { useRef } from "react";
+import { useRouter } from "next/router";
 import "../app/globals.css";
 import Image from "next/image";
 import musicServices from "../services/music";
 
 const loginForm = () => {
+  const router = useRouter();
   const usernameRef = useRef();
   const passwordRef = useRef();
-  const handleSubmitSignIn = (e) => {
+  const handleSubmitSignIn = async (e) => {
     e.preventDefault();
     const loginData = {
       username: usernameRef.current.value,
       password: passwordRef.current.value,
     };
 
-    musicServices.login(loginData);
+    await musicServices.login(loginData);
+    router.push("/");
   };
 
   return (

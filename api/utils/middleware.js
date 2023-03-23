@@ -20,9 +20,12 @@ const tokenExtractor = (req, res, next) => {
 };
 
 const userExtractor = async (req, res, next) => {
-  const decodedToken = jwt.verify(req.token, process.env.SECRET);
+  const decodedToken = jwt.verify(req.cookies.token, process.env.SECRET);
 
   const user = await User.findById(decodedToken.id);
+  if (!user) {
+    return res.status(400).json({ error: "Unauthorized" });
+  }
   req.user = user;
   next();
 };
