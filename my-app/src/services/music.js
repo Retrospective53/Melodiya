@@ -75,7 +75,9 @@ const uploadSong = async (files, songData) => {
 // Auth
 
 const login = async (loginData) => {
-  const response = await axios.post(`${baseUrl}/api/auth/login`, loginData);
+  const response = await axios.post(`${baseUrl}/api/auth/login`, loginData, {
+    withCredentials: true,
+  });
   return response.data;
 };
 

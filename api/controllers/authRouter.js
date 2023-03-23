@@ -29,9 +29,9 @@ authRouter.post("/login", async (request, response) => {
     .cookie("token", token, {
       httpOnly: true,
       sameSite: "strict",
-      maxAge: 10 * 60,
+      expiresIn: "1h",
     })
-    .send("Cookie Set");
+    .sendStatus(200);
 });
 
 authRouter.get("/logout", async (request, response) => {

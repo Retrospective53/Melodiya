@@ -11,10 +11,10 @@ const requestLogger = (req, res, next) => {
 };
 
 const tokenExtractor = (req, res, next) => {
-  req.token = req.cookies.token;
-  if (!req.token) {
+  if (req.cookies.token) {
     return res.status(401).json({ error: "please login" });
   }
+  req.token = req.cookies.token;
 
   next();
 };
