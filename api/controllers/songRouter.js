@@ -2,6 +2,7 @@ const songRouter = require("express").Router();
 const Song = require("../models/song");
 const Genre = require("../models/genre");
 const User = require("../models/user");
+const Comment = require("../models/comment");
 const b2Method = require("../storage/backblaze");
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
@@ -105,13 +106,11 @@ songRouter.post(
 
 songRouter.put(
   "/:id/likes",
-  middleware.tokenExtractor,
+  middleware.userExtractor,
   async (request, response) => {
     const song = await Song.findById(request.params.id);
     const user = request.user;
-    if (!user) {
-      return response.status(401).json({ error: "Unauthorized" });
-    }
+    console.log(user);
     if (song.likes.includes(user._id)) {
       song.likes.splice(song.likes.indexOf(user._id), 1);
     } else {
@@ -122,9 +121,27 @@ songRouter.put(
   }
 );
 
-songRouter.put("/:id/comments", async (request, response) => {
-  const song = await Song.findById(request.params.id);
-});
+songRouter.put(
+  "/:id/comments",
+  middleware.userExtractor,
+  async (request, response) => {
+    const { createdBy, text, is_anonymous } = request.body;
+    const comment = new Comment({
+      song: request.params.id,
+      createdBy,
+      text,
+      is_anonymous,
+    });
+
+    const savedComment = await Comment.save();
+    console.log(savedComment);
+    const song = await Song.findById(request.params.id);
+    song.comments.push(savedComment._id);
+    await song.save();
+
+    response.status(201).json(savedComment);
+  }
+);
 
 songRouter.delete("/:id", async (request, response) => {
   const song = await Song.findById(request.params.id);

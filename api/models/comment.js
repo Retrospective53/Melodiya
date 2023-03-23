@@ -7,6 +7,7 @@ const commentSchema = new mongoose.Schema({
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   song: { type: mongoose.Schema.Types.ObjectId, ref: "Song" },
   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  is_anonymous: { type: Boolean, default: false },
 });
 
 commentSchema.set("toJSON", {

@@ -10,15 +10,6 @@ const requestLogger = (req, res, next) => {
   next();
 };
 
-const tokenExtractor = (req, res, next) => {
-  if (req.cookies.token) {
-    return res.status(401).json({ error: "please login" });
-  }
-  req.token = req.cookies.token;
-
-  next();
-};
-
 const userExtractor = async (req, res, next) => {
   const decodedToken = jwt.verify(req.cookies.token, process.env.SECRET);
 
@@ -54,6 +45,5 @@ module.exports = {
   requestLogger,
   unknownEndpoint,
   errorHandler,
-  tokenExtractor,
   userExtractor,
 };

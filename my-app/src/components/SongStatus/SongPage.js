@@ -4,11 +4,17 @@ import musicServices from "../../services/music";
 import { useRouter } from "next/router";
 
 const SongPage = ({ song }) => {
+  const [likes, setLikes] = useState(song.likes.length);
   const router = useRouter();
 
   const handleClickDelete = async () => {
     await musicServices.deleteSong(song.id);
     router.push("/");
+  };
+
+  const handleClickLike = async () => {
+    const updatedSong = await musicServices.sentLikes(song.id);
+    setLikes(updatedSong.likes.length);
   };
 
   const pictureUrl = `https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=${song.picture}`;
@@ -32,6 +38,7 @@ const SongPage = ({ song }) => {
           <p className="text-gray-500">{song.genres.join(", ")}</p>
           <p className="mt-4 text-lg">{song.duration} seconds</p>
           <p className="text-lg">{song.playCount} plays</p>
+          <p className="text-lg">{likes} Likes</p>
           <div className="mt-4">
             <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded">
               Play
@@ -40,6 +47,11 @@ const SongPage = ({ song }) => {
           <div className="mt-4" onClick={handleClickDelete}>
             <button className=" text-white font-bold py-2 px-4 rounded bg-red-800">
               Delete Song
+            </button>
+          </div>
+          <div className="mt-4" onClick={handleClickLike}>
+            <button className=" text-white font-bold py-2 px-4 rounded bg-red-800">
+              Like
             </button>
           </div>
         </div>

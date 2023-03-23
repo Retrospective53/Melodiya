@@ -74,6 +74,28 @@ const login = async (loginData) => {
   return response.data;
 };
 
+// Comment
+
+const sentComment = async (songId, commentData) => {
+  const response = await axios.put(
+    `${baseUrl}/api/songs/${songId}/comments`,
+    commentData,
+    { withCredentials: true }
+  );
+  return response.data;
+};
+
+// Likes
+
+const sentLikes = async (songId) => {
+  const response = await axios.put(
+    `${baseUrl}/api/songs/${songId}/likes`,
+    null,
+    { withCredentials: true }
+  );
+  return response.data;
+};
+
 export default {
   getMusic,
   getAMusic,
@@ -84,4 +106,6 @@ export default {
   getDownloadUrlById,
   deleteSong,
   login,
+  sentComment,
+  sentLikes,
 };
