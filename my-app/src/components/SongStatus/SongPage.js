@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useRef } from "react";
 import Image from "next/image";
 import musicServices from "../../services/music";
 import { useRouter } from "next/router";
@@ -7,6 +7,9 @@ const SongPage = ({ song }) => {
   const [likes, setLikes] = useState(song.likes.length);
   const router = useRouter();
 
+  const commentRef = useRef();
+  const [comments, setComments] = useState(song.comments);
+
   const handleClickDelete = async () => {
     await musicServices.deleteSong(song.id);
     router.push("/");
@@ -14,7 +17,18 @@ const SongPage = ({ song }) => {
 
   const handleClickLike = async () => {
     const updatedSong = await musicServices.sentLikes(song.id);
+    song = updatedSong;
     setLikes(updatedSong.likes.length);
+  };
+
+  const handleSubmitComment = async (e) => {
+    e.preventDefault();
+    const commentObj = {
+      text: commentRef.current.value,
+      is_anonymous: false,
+    };
+    const newComment = await musicServices.sentComment(song.id, commentObj);
+    setComments([...comments, newComment]);
   };
 
   const pictureUrl = `https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=${song.picture}`;
@@ -44,21 +58,22 @@ const SongPage = ({ song }) => {
               Play
             </button>
           </div>
+          <div className="mt-4" onClick={handleClickLike}>
+            <button className=" text-white font-bold py-2 px-4 rounded bg-red-800">
+              Like
+            </button>
+            <button onClick={() => console.log(song)}>check song</button>
+          </div>
           <div className="mt-4" onClick={handleClickDelete}>
             <button className=" text-white font-bold py-2 px-4 rounded bg-red-800">
               Delete Song
             </button>
           </div>
-          <div className="mt-4" onClick={handleClickLike}>
-            <button className=" text-white font-bold py-2 px-4 rounded bg-red-800">
-              Like
-            </button>
-          </div>
         </div>
         <div>
           <h2 className="text-2xl font-bold">Comments</h2>
-          {song.comments.length > 0 ? (
-            song.comments.map((comment) => (
+          {comments.length > 0 ? (
+            comments.map((comment) => (
               <div key={comment.id} className="border-b py-2">
                 <p className="text-lg font-bold">{comment.user}</p>
                 <p>{comment.text}</p>
@@ -67,10 +82,13 @@ const SongPage = ({ song }) => {
           ) : (
             <p>No comments yet.</p>
           )}
-          <form className="mt-4" onSubmit={(e) => e.preventDefault()}>
+          <form className="mt-4" onSubmit={handleSubmitComment}>
             <div className="flex flex-col">
               <label className="text-lg font-bold">Add a comment</label>
-              <textarea className="mt-2 border rounded p-2"></textarea>
+              <textarea
+                ref={commentRef}
+                className="mt-2 border rounded p-2"
+              ></textarea>
               <button className="mt-2 bg-blue-500 text-white font-bold py-2 px-4 rounded">
                 Submit
               </button>

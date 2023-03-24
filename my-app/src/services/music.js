@@ -96,6 +96,12 @@ const sentLikes = async (songId) => {
   return response.data;
 };
 
+// Increase Playcount
+const incPlaycount = async (songId) => {
+  const response = await axios.put(`${baseUrl}/api/songs/${songId}/play`);
+  return response.data;
+};
+
 export default {
   getMusic,
   getAMusic,
@@ -108,4 +114,5 @@ export default {
   login,
   sentComment,
   sentLikes,
+  incPlaycount,
 };

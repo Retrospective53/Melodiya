@@ -60,10 +60,13 @@ const SongList = () => {
     };
 
     const musicDisplay = (music) => {
-      const { title, duration, likes, playCount, picture, id } = music;
+      const { title, duration, likes, playCount, picture, id, comments } =
+        music;
+
       const imgUrl = `${downloadUrlById}${picture}`;
 
       const handleSongClick = () => {
+        musicServices.incPlaycount(id);
         setSelectedSong(music);
       };
 
@@ -99,7 +102,7 @@ const SongList = () => {
                 <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
                 <path d="M21 8a1 1 0 0 0-1-1h-1a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1V8z"></path>
               </svg>
-              <span className="mr-4">{likes}</span>
+              <span className="mr-4">{comments.length}</span>
               <svg
                 className="w-4 h-4 fill-current mr-2"
                 viewBox="0 0 24 24"
@@ -107,7 +110,7 @@ const SongList = () => {
               >
                 <path d="M3 3h18v2H3V3zm0 6h12v2H3V9zm0 6h18v2H3v-2z"></path>
               </svg>
-              <span className="mr-4">{playCount}</span>
+              <span className="mr-4">{playCount} </span>
               <svg
                 className="w-4 h-4 fill-current mr-2"
                 viewBox="0 0 24 24"
@@ -115,7 +118,7 @@ const SongList = () => {
               >
                 <path d="M8 5v14l11-7z"></path>
               </svg>
-              <span>{duration}</span>
+              <span>{playCount}</span>
             </div>
             <div className="flex items-center text-gray-400">
               <svg
@@ -125,7 +128,7 @@ const SongList = () => {
               >
                 <path d="M6 19h10l-5-6z"></path>
               </svg>
-              <span>Repost</span>
+              <span>{likes.length} likes</span>
               <svg
                 className="w-6 h-6 fill-current ml-6 mr-2"
                 viewBox="0 0 24 24"
