@@ -61,11 +61,11 @@ const Nabvar = () => {
             <Link href="/upload" scroll={false}>
               <li className="ml-10 text-sm uppercase hover:border-b">Upload</li>
             </Link>
-            <Link href="/" scroll={false}>
+            {/* <Link href="/" scroll={false}>
               <li className="ml-10 text-sm uppercase hover:border-b">
                 Projects
               </li>
-            </Link>
+            </Link> */}
             <Link href="/login" scroll={false}>
               <li className="ml-10 text-sm uppercase hover:border-b">
                 Profile

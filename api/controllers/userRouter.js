@@ -33,23 +33,18 @@ userRouter.post("/", async (request, response) => {
 });
 
 userRouter.get("/", async (request, response) => {
-  const users = await User.find({})
-    .populate("songs")
-    .populate("favSongs")
-    .populate("friends")
-    .populate("following")
-    .populate("followers");
+  const users = await User.find({}).populate("songs");
 
   response.status(200).json(users);
 });
 
 userRouter.get("/:id", async (request, response) => {
-  const user = await User.findById(request.params.id)
-    .populate("songs")
-    .populate("favSongs")
-    .populate("friends")
-    .populate("following")
-    .populate("followers");
+  const user = await User.findById(request.params.id).populate("songs");
+
+  // .populate("favSongs")
+  // .populate("friends")
+  // .populate("following")
+  // .populate("followers");
 
   response.status(200).json(user);
 });

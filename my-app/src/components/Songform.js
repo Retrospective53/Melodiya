@@ -182,13 +182,13 @@ const Songform = () => {
           <div className={metadata ? "col-span-3" : "col-span-5"}>
             <label htmlFor="file-input">Choose a song:</label>
             <input type="file" id="file-input" onInput={handleFileInput} />
-            <button
+            {/* <button
               onClick={() => {
                 console.log(isPrivateRef.current.checked);
               }}
             >
               Metadata
-            </button>
+            </button> */}
             <div>{metadata && uploadForm({ metadata })}</div>
           </div>
         </div>

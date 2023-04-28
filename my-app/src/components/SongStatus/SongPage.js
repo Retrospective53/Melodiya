@@ -39,14 +39,14 @@ const SongPage = ({ song }) => {
   return (
     <div className="container mx-auto mt-4 h-min-screen">
       <div className="grid md:grid-cols-2 gap-4">
-        <div>
+        <div className="w-auto">
           <Image
             loader={() => pictureUrl}
-            className="w-full rounded-lg shadow-lg"
+            className="rounded-lg shadow-lg m-auto"
             src={pictureUrl}
             alt={song.title}
-            width={500}
-            height={500}
+            width={300}
+            height={300}
           />
           <h1 className="mt-4 text-3xl font-bold">{song.title}</h1>
           <p className="text-gray-500">{song.genres.join(", ")}</p>
@@ -62,7 +62,7 @@ const SongPage = ({ song }) => {
             <button className=" text-white font-bold py-2 px-4 rounded bg-red-800">
               Like
             </button>
-            <button onClick={() => console.log(song)}>check song</button>
+            {/* <button onClick={() => console.log(song)}>check song</button> */}
           </div>
           <div className="mt-4" onClick={handleClickDelete}>
             <button className=" text-white font-bold py-2 px-4 rounded bg-red-800">

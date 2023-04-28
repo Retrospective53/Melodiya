@@ -11,12 +11,17 @@ const fs = require("fs");
 const middleware = require("../utils/middleware");
 
 songRouter.get("/", async (request, response) => {
-  const songs = await Song.find({});
+  const songs = await Song.find({ private: false });
   response.status(200).json(songs);
 });
 
 songRouter.get("/:id", async (request, response) => {
-  const song = await Song.findById(request.params.id);
+  const song = await Song.findById(request.params.id).populate({
+    path: "comments",
+    populate: {
+      path: "createdBy",
+    },
+  });
   response.status(200).json(song);
 });
 
@@ -125,15 +130,15 @@ songRouter.put(
   "/:id/comments",
   middleware.userExtractor,
   async (request, response) => {
-    const { createdBy, text, is_anonymous } = request.body;
+    const { text, is_anonymous } = request.body;
     const comment = new Comment({
       song: request.params.id,
-      createdBy,
+      createdBy: request.user._id,
       text,
       is_anonymous,
     });
 
-    const savedComment = await Comment.save();
+    const savedComment = await comment.save();
     console.log(savedComment);
     const song = await Song.findById(request.params.id);
     song.comments.push(savedComment._id);
@@ -142,6 +147,14 @@ songRouter.put(
     response.status(201).json(savedComment);
   }
 );
+
+songRouter.put("/:id/play", async (request, response) => {
+  const increasedPlaySong = await Song.findByIdAndUpdate(request.params.id, {
+    $inc: { playCount: 1 },
+  });
+  console.log(increasedPlaySong);
+  response.status(204).json(increasedPlaySong);
+});
 
 songRouter.delete("/:id", async (request, response) => {
   const song = await Song.findById(request.params.id);
