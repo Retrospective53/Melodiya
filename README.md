@@ -10,7 +10,7 @@ This project uses Next.js for the frontend and Node.js with Express for the back
 
 2. **Login Page:** User authentication is implemented through a login page. Users can securely create an account and log in to access additional features and personalize their experience.
 
-3. **Song Upload:** Registered users can upload their own songs to the platform. This feature enables musicians and artists to share their original music with the Melodiya community.
+3. **Song Upload:** Registered users can upload their own songs to the platform. This feature enables musicians and artists to share their original music with the Melodiya community. The uploaded songs are automatically analyzed to extract relevant metadata, such as the song title, artist name, and album artwork, providing a streamlined experience for users.
 
 4. **Song Comments:** Users can comment on songs, fostering engagement and creating a sense of community. This allows listeners to express their thoughts, provide feedback, and connect with fellow music enthusiasts.
 
